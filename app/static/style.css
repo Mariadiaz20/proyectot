@@ -1,0 +1,55 @@
+/* ...existing code... */
+.footer-column a {
+    color: #1d0cb4;
+}
+/* ...existing code...*/
+
+/* Tabs estilo Nike */
+.nav-tabs .nav-link {
+  border: none;
+  font-weight: 600;
+  color: #555;
+}
+.nav-tabs .nav-link.active {
+  border-bottom: 2px solid #ff6600; /* color resaltado */
+  color: #000;
+}
+
+/* Inputs */
+.modal-content input {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Botón */
+.modal-content .btn-dark {
+  border-radius: 8px;
+  font-weight: bold;
+}
+body {
+  background-color: #111; /* negro claro */
+  color: white;
+}
+
+/* Forzar alineación y altura uniforme en catálogo */
+.catalog-card {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.catalog-card .card-img-top {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 100% !important;
+  max-height: 200px !important;
+  width: auto !important;
+  height: 200px !important;
+  object-fit: contain !important;
+  background: #fff !important;
+}
+.catalog-card .card-body {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}

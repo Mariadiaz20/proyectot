@@ -1,0 +1,16 @@
+
+{% extends "base.html" %}
+{% block title %}Admin - Reporte{% endblock %}
+{% block content %}
+<h2 class="h5">Reporte de ventas por día</h2>
+<div class="table-responsive">
+<table class="table table-sm">
+  <thead><tr><th>Fecha</th><th>Ventas</th></tr></thead>
+  <tbody>
+  {% for row in rows %}
+    <tr><td>{{ row[0] }}</td><td>${{ '%.0f'|format(row[1] or 0) }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

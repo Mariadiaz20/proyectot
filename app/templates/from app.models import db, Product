@@ -1,0 +1,14 @@
+from app.models import db, Product
+
+# Encuentra nombres de productos repetidos
+duplicates = db.session.query(Product.name).group_by(Product.name).having(db.func.count(Product.id) > 1).all()
+
+for (name,) in duplicates:
+    # Obtiene todos los productos con ese nombre, ordenados por id
+    products = Product.query.filter_by(name=name).order_by(Product.id).all()
+    # Deja el primero y elimina los demás
+    for p in products[1:]:
+        db.session.delete(p)
+
+db.session.commit()
+print("Productos duplicados eliminados.")

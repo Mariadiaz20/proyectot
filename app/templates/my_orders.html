@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+{% block title %}Mis pedidos{% endblock %}
+{% block content %}
+<h2 class="h4">Mis pedidos</h2>
+<div class="table-responsive">
+<table class="table">
+  <thead><tr><th>#</th><th>Fecha</th><th>Estado</th><th>Total</th></tr></thead>
+  <tbody>
+  {% for o in orders %}
+  <tr>
+    <td>{{ o.id }}</td>
+    <td>{{ o.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+    <td><span class="badge text-bg-secondary">{{ o.status }}</span></td>
+    <td>${{ '%.0f'|format(o.total or 0) }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="4" class="text-center">No tienes pedidos.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

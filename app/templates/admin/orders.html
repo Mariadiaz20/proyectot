@@ -1,0 +1,32 @@
+
+{% extends "base.html" %}
+{% block title %}Admin - Pedidos{% endblock %}
+{% block content %}
+<h2 class="h5">Pedidos</h2>
+<div class="table-responsive">
+<table class="table table-sm">
+  <thead><tr><th>#</th><th>Usuario</th><th>Fecha</th><th>Estado</th><th>Total</th><th>Acciones</th></tr></thead>
+  <tbody>
+  {% for o in orders %}
+  <tr>
+    <td>{{ o.id }}</td>
+    <td>{{ o.user.name }} ({{ o.user.email }})</td>
+    <td>{{ o.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+    <td><span class="badge text-bg-secondary">{{ o.status }}</span></td>
+    <td>${{ '%.0f'|format(o.total or 0) }}</td>
+    <td>
+      <form class="d-flex gap-2" method="post" action="{{ url_for('admin.orders_status', oid=o.id) }}">
+        <select class="form-select form-select-sm" name="status">
+          {% for st in ['pending','paid','shipped','delivered','cancelled'] %}
+            <option value="{{ st }}" {% if o.status==st %}selected{% endif %}>{{ st }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn btn-outline-secondary btn-sm" type="submit">Guardar</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

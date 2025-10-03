@@ -1,0 +1,35 @@
+
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<h2 class="h4 mb-3">Dirección de envío</h2>
+<form class="row g-3" method="post">
+  <div class="col-md-6">
+    <label class="form-label">Dirección línea 1</label>
+    <input class="form-control" name="line1" required>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Dirección línea 2</label>
+    <input class="form-control" name="line2">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Ciudad</label>
+    <input class="form-control" name="city" required>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Departamento/Estado</label>
+    <input class="form-control" name="state" required>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Código Postal</label>
+    <input class="form-control" name="zip_code" required>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">País</label>
+    <input class="form-control" name="country" value="Colombia">
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Confirmar pedido</button>
+  </div>
+</form>
+{% endblock %}

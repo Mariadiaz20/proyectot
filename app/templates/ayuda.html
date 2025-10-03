@@ -1,0 +1,20 @@
+
+{% extends "base.html" %}
+{% block title %}ayuda{% endblock %}
+{% block content %}
+<div class="col-md-8 col-lg-6">
+  <h1 class="h3 mb-3">ayuda</h1>
+  <ul>
+                       <li><a href="#">Estado del Pedido</a></li>
+                        <li><a href="#">Envíos y Entregas</a></li>
+                        <li><a href="#">Devoluciones</a></li>
+                        <li><a href="{{ url_for('public.contact') }}">Contacto</a></li>
+                    </ul>
+  <div class="alert alert-info">
+  Para dudas escríbenos a 
+  <strong>
+    <a href="mailto:UrbanQueens@gmail.com">UrbanQueens@gmail.com</a>
+  </strong>
+</div>
+{% endblock %}
+

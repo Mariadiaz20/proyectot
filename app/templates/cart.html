@@ -1,0 +1,37 @@
+
+{% extends "base.html" %}
+{% block title %}Carrito{% endblock %}
+{% block content %}
+<h2 class="h4">Carrito</h2>
+{% if items %}
+<div class="table-responsive">
+<table class="table align-middle">
+  <thead><tr><th>Producto</th><th style="width:140px">Cantidad</th><th>Precio</th><th>Total</th><th></th></tr></thead>
+  <tbody>
+  {% for it in items %}
+  <tr>
+    <td>{{ it.product.name }}</td>
+    <td>
+      <form class="d-flex gap-2" method="post" action="{{ url_for('cart.update_cart', product_id=it.product.id) }}">
+        <input class="form-control" style="max-width:90px" type="number" name="qty" value="{{ it.qty }}" min="1">
+        <button class="btn btn-outline-secondary" type="submit">Actualizar</button>
+      </form>
+    </td>
+    <td>${{ '%.0f'|format(it.product.price) }}</td>
+    <td>${{ '%.0f'|format(it.line_total) }}</td>
+    <td>
+      <form method="post" action="{{ url_for('cart.remove_from_cart', product_id=it.product.id) }}">
+        <button class="btn btn-outline-danger btn-sm" type="submit">Eliminar</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+<p class="fs-5"><strong>Subtotal:</strong> ${{ '%.0f'|format(subtotal) }}</p>
+<a class="btn btn-primary" href="{{ url_for('orders.checkout') }}">Ir a pagar</a>
+{% else %}
+<div class="alert alert-secondary">Tu carrito está vacío.</div>
+{% endif %}
+{% endblock %}

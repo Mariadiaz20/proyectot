@@ -1,0 +1,20 @@
+
+{% extends "base.html" %}
+{% block title %}Admin - Categorías{% endblock %}
+{% block content %}
+<h2 class="h5">Categorías</h2>
+<form class="row g-2 mb-3" method="post">
+  <div class="col-auto"><input class="form-control" name="name" placeholder="Nueva categoría" required></div>
+  <div class="col-auto"><button class="btn btn-primary" type="submit">Crear</button></div>
+</form>
+<div class="table-responsive">
+<table class="table table-sm">
+  <thead><tr><th>#</th><th>Nombre</th></tr></thead>
+  <tbody>
+  {% for c in categories %}
+  <tr><td>{{ c.id }}</td><td>{{ c.name }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
