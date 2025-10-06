@@ -4,6 +4,10 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
 from .models import db
+from dotenv import load_dotenv
+import os
+
+load_dotenv() 
 
 bcrypt = Bcrypt()
 login_manager = LoginManager()
@@ -13,7 +17,12 @@ mail = Mail()  # <--- la instancia de mail
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'supersecretkey'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/tienda_zapatillas'
+    
+    # Imprimir la URI para verificar que se carga correctamente
+    print("→ Conectando a:", os.getenv("SQLALCHEMY_DATABASE_URI"))
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
+
 
     # Configuración de correo (ejemplo con Gmail)
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
