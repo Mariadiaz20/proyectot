@@ -1,20 +1,86 @@
-
 {% extends "base.html" %}
-{% block title %}ayuda{% endblock %}
+{% block title %}Ayuda{% endblock %}
 {% block content %}
-<div class="col-md-8 col-lg-6">
-  <h1 class="h3 mb-3">ayuda</h1>
-  <ul>
-                       <li><a href="#">Estado del Pedido</a></li>
-                        <li><a href="#">Envíos y Entregas</a></li>
-                        <li><a href="#">Devoluciones</a></li>
-                        <li><a href="{{ url_for('public.contact') }}">Contacto</a></li>
-                    </ul>
-  <div class="alert alert-info">
-  Para dudas escríbenos a 
-  <strong>
-    <a href="mailto:UrbanQueens@gmail.com">UrbanQueens@gmail.com</a>
-  </strong>
-</div>
-{% endblock %}
 
+<div class="col-md-8 col-lg-6">
+  <h1 class="h3 mb-3">Centro de Ayuda</h1>
+
+  <div class="footer-column">
+    <ul>
+      <li><a href="#" onclick="toggleHelp('pedido-info'); return false;">Estado del Pedido</a></li>
+      <li><a href="#" onclick="toggleHelp('garantia-info'); return false;">Política de Garantía</a></li>
+      <li><a href="#" onclick="toggleHelp('devoluciones-info'); return false;">Devoluciones</a></li>
+      <li><a href="#" onclick="toggleHelp('contacto-info'); return false;">Contacto</a></li>
+    </ul>
+  </div>
+
+  <div id="pedido-info" style="display:none; margin-top:10px;">
+    <strong>Estado del Pedido:</strong>
+    <p>Para conocer el estado de tu pedido, inicia sesión en tu cuenta y dirígete a <strong>“Mis Pedidos”</strong>.
+       Allí podrás ver si tu compra está en preparación, enviada o entregada.</p>
+    <p>Además, recibirás actualizaciones por correo electrónico con cada cambio de estado.</p>
+  </div>
+
+  <div id="garantia-info" style="display:none; margin-top:10px;">
+    <strong>Política de Garantía:</strong>
+    <p>Todos nuestros productos están respaldados por una garantía de <strong>30 días</strong> desde la fecha de entrega.</p>
+    <p>Esta garantía cubre defectos de fabricación. Si tu producto presenta algún problema,
+       escríbenos a nuestro correo con el número de pedido y una imagen del artículo.</p>
+  </div>
+
+  <div id="devoluciones-info" style="display:none; margin-top:10px;">
+    <strong>Devoluciones:</strong>
+    <p>Si no estás satisfecha con tu compra, puedes devolver el producto dentro de los primeros <strong>15 días</strong>
+       después de recibirlo.</p>
+    <ul>
+      <li>Debe estar en su empaque original y sin signos de uso.</li>
+      <li>Los gastos de envío por devolución corren por cuenta del cliente, salvo en caso de defecto.</li>
+      <li>Una vez recibamos el artículo, procesaremos el reembolso o cambio según tu solicitud.</li>
+    </ul>
+  </div>
+
+  <div id="contacto-info" style="display:none; margin-top:10px;">
+    <strong>Contacto:</strong>
+    <p>¿Necesitas ayuda o tienes alguna duda?</p>
+    <ul>
+      <li>📧 Escríbenos a <a href="mailto:UrbanQueens@gmail.com">UrbanQueens@gmail.com</a></li>
+      <li>📱 Síguenos y escríbenos en nuestras redes sociales oficiales.</li>
+      <li>🕓 Horario de atención: Lunes a Viernes de 8:00 a.m. a 6:00 p.m.</li>
+    </ul>
+  </div>
+
+  <div class="alert alert-info" style="margin-top:20px;">
+    Para más información escríbenos a 
+    <strong><a href="mailto:UrbanQueens@gmail.com">UrbanQueens@gmail.com</a></strong>
+  </div>
+</div>
+
+<script>
+function toggleHelp(id) {
+  // Oculta todos los bloques
+  document.getElementById('pedido-info').style.display = 'none';
+  document.getElementById('garantia-info').style.display = 'none';
+  document.getElementById('devoluciones-info').style.display = 'none';
+  document.getElementById('contacto-info').style.display = 'none';
+
+  // Si el bloque seleccionado estaba oculto, lo muestra; si estaba visible, lo oculta
+  var el = document.getElementById(id);
+  if (el.dataset.visible === "true") {
+    el.style.display = 'none';
+    el.dataset.visible = "false";
+  } else {
+    el.style.display = 'block';
+    el.dataset.visible = "true";
+  }
+}
+
+// Inicializa el estado de los bloques
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById('pedido-info').dataset.visible = "false";
+  document.getElementById('garantia-info').dataset.visible = "false";
+  document.getElementById('devoluciones-info').dataset.visible = "false";
+  document.getElementById('contacto-info').dataset.visible = "false";
+});
+</script>
+
+{% endblock %}
