@@ -1,66 +1,163 @@
-
 {% extends "base.html" %}
 {% block title %}Admin - Productos{% endblock %}
+
 {% block content %}
-<div class="row">
-  <div class="col-lg-5">
-    <h2 class="h5">Crear producto</h2>
-    <form method="post" action="{{ url_for('admin.products_create') }}">
-      <div class="mb-2"><label class="form-label">Nombre</label><input class="form-control" name="name" required></div>
-      <div class="mb-2"><label class="form-label">Descripción</label><textarea class="form-control" name="description"></textarea></div>
-      <div class="mb-2"><label class="form-label">Precio</label><input class="form-control" type="number" name="price" step="0.01" required></div>
-      <div class="mb-2"><label class="form-label">Stock</label><input class="form-control" type="number" name="stock" required value="0"></div>
-      <div class="mb-2"><label class="form-label">Imagen URL</label><input class="form-control" name="image_url"></div>
-      <div class="mb-3">
-        <label class="form-label">Categoría</label>
-        <select class="form-select" name="category_id">
-          <option value="">--</option>
-          {% for c in categories %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
-        </select>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Columna principal (contenido) -->
+    <div class="col-lg-9 offset-lg-3 col-md-9 offset-md-3 px-4">
+      <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+        <h2 class="h4 text-primary mb-0">🛍️ Gestión de Productos</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearProductoModal">
+          ➕ Crear producto
+        </button>
       </div>
-      <button class="btn btn-primary" type="submit">Crear</button>
-    </form>
-  </div>
-  <div class="col-lg-7">
-    <h2 class="h5">Listado</h2>
-    <div class="table-responsive">
-    <table class="table table-sm align-middle">
-      <thead><tr><th>#</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Cat</th><th>Editar</th><th>Eliminar</th></tr></thead>
-      <tbody>
-      {% for p in products %}
-      <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ p.name }}</td>
-        <td>${{ '%.0f'|format(p.price) }}</td>
-        <td>{{ p.stock }}</td>
-        <td>{{ p.category.name if p.category else '' }}</td>
-        <td>
-          <form class="row g-1" method="post" action="{{ url_for('admin.products_update', pid=p.id) }}">
-            <div class="col-12 col-md-6"><input class="form-control form-control-sm" name="name" value="{{ p.name }}"></div>
-            <div class="col-12"><input class="form-control form-control-sm" name="description" value="{{ p.description }}"></div>
-            <div class="col-6 col-md-3"><input class="form-control form-control-sm" name="price" type="number" step="0.01" value="{{ p.price }}"></div>
-            <div class="col-6 col-md-2"><input class="form-control form-control-sm" name="stock" type="number" value="{{ p.stock }}"></div>
-            <div class="col-12"><input class="form-control form-control-sm" name="image_url" value="{{ p.image_url or '' }}"></div>
-            <div class="col-8">
-              <select class="form-select form-select-sm" name="category_id">
-                <option value="">--</option>
-                {% for c in categories %}
-                  <option value="{{ c.id }}" {% if p.category_id==c.id %}selected{% endif %}>{{ c.name }}</option>
+
+      <div class="card shadow-sm p-4 border-0">
+        <h5 class="mb-3 text-secondary">Listado de productos</h5>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if products %}
+                {% for p in products %}
+                <tr>
+                  <td>{{ p.id }}</td>
+                  <td>
+                    <strong>{{ p.name }}</strong><br>
+                    <small class="text-muted d-block text-truncate" style="max-width:200px;" title="{{ p.description }}">
+                      {{ p.description }}
+                    </small>
+                  </td>
+                  <td>${{ '%.0f'|format(p.price) }}</td>
+                  <td>{{ p.stock }}</td>
+                  <td>{{ p.category.name if p.category else '-' }}</td>
+                  <td class="text-center">
+                    <div class="d-flex justify-content-center gap-2">
+                      <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ p.id }}">
+                        Editar
+                      </button>
+                      <form method="post" action="{{ url_for('admin.products_delete', pid=p.id) }}">
+                        <button class="btn btn-outline-danger btn-sm" type="submit">Eliminar</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Modal de edición -->
+                <div class="modal fade" id="editModal{{ p.id }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <form method="post" action="{{ url_for('admin.products_update', pid=p.id) }}">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Editar producto #{{ p.id }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input class="form-control" name="name" value="{{ p.name }}">
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea class="form-control" name="description" rows="2">{{ p.description }}</textarea>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-6">
+                              <label class="form-label">Precio</label>
+                              <input class="form-control" name="price" type="number" step="0.01" value="{{ p.price }}">
+                            </div>
+                            <div class="col-6">
+                              <label class="form-label">Stock</label>
+                              <input class="form-control" name="stock" type="number" value="{{ p.stock }}">
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Categoría</label>
+                            <select class="form-select" name="category_id">
+                              <option value="">--</option>
+                              {% for c in categories %}
+                                <option value="{{ c.id }}" {% if p.category_id==c.id %}selected{% endif %}>{{ c.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
                 {% endfor %}
-              </select>
+              {% else %}
+                <tr><td colspan="6" class="text-center text-muted py-3">No hay productos registrados</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para crear producto -->
+<div class="modal fade" id="crearProductoModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form method="post" action="{{ url_for('admin.products_create') }}">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Crear producto</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nombre</label>
+            <input class="form-control" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Descripción</label>
+            <textarea class="form-control" name="description" rows="2"></textarea>
+          </div>
+          <div class="row mb-3">
+            <div class="col-6">
+              <label class="form-label fw-semibold">Precio</label>
+              <input class="form-control" type="number" name="price" step="0.01" required>
             </div>
-            <div class="col-4"><button class="btn btn-outline-secondary btn-sm w-100" type="submit">Guardar</button></div>
-          </form>
-        </td>
-        <td>
-          <form method="post" action="{{ url_for('admin.products_delete', pid=p.id) }}">
-            <button class="btn btn-outline-danger btn-sm" type="submit">Eliminar</button>
-          </form>
-        </td>
-      </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+            <div class="col-6">
+              <label class="form-label fw-semibold">Stock</label>
+              <input class="form-control" type="number" name="stock" required value="0">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Imagen (URL)</label>
+            <input class="form-control" name="image_url" placeholder="https://...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Categoría</label>
+            <select class="form-select" name="category_id">
+              <option value="">-- Seleccionar --</option>
+              {% for c in categories %}
+                <option value="{{ c.id }}">{{ c.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
+          <button class="btn btn-primary" type="submit">Crear producto</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

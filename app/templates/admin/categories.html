@@ -1,20 +1,55 @@
 
 {% extends "base.html" %}
 {% block title %}Admin - Categorías{% endblock %}
+
 {% block content %}
-<h2 class="h5">Categorías</h2>
-<form class="row g-2 mb-3" method="post">
-  <div class="col-auto"><input class="form-control" name="name" placeholder="Nueva categoría" required></div>
-  <div class="col-auto"><button class="btn btn-primary" type="submit">Crear</button></div>
-</form>
-<div class="table-responsive">
-<table class="table table-sm">
-  <thead><tr><th>#</th><th>Nombre</th></tr></thead>
-  <tbody>
-  {% for c in categories %}
-  <tr><td>{{ c.id }}</td><td>{{ c.name }}</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="container-fluid">
+  <h2 class="h4 mb-4">📦 Gestión de categorías</h2>
+
+  <!-- Formulario para crear nueva categoría -->
+  <div class="card shadow-sm p-3 mb-4">
+    <form class="row g-2 align-items-center" method="post" action="{{ url_for('admin.categories') }}">
+      <div class="col-md-6 col-lg-4">
+        <input class="form-control" name="name" placeholder="Nombre de la nueva categoría" required>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-primary" type="submit">➕ Crear</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de categorías existentes -->
+  <div class="card shadow-sm p-3">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if categories %}
+            {% for c in categories %}
+              <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.name }}</td>
+                <td>
+                  <form method="post" action="{{ url_for('admin.categories_delete', cid=c.id) }}" onsubmit="return confirm('¿Eliminar esta categoría?');">
+                    <button class="btn btn-outline-danger btn-sm" type="submit">Eliminar</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="3" class="text-center text-muted py-3">No hay categorías registradas</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 {% endblock %}

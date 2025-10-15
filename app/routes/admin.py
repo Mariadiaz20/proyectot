@@ -1,11 +1,10 @@
-
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from ..models import db, Product, Category, Order, User
 from sqlalchemy import func
 from datetime import datetime, timedelta
 
-admin_bp = Blueprint("admin", __name__)
+admin_bp = Blueprint("admin", __name__,url_prefix='/admin')
 
 def admin_required(func_view):
     from functools import wraps
@@ -100,6 +99,22 @@ def categories():
             flash("Categoría creada", "success")
     cats = Category.query.order_by(Category.name).all()
     return render_template("admin/categories.html", categories=cats)
+@admin_bp.route("/categories/<int:cid>/delete", methods=["POST"])
+@login_required
+@admin_required
+def categories_delete(cid):
+    category = Category.query.get_or_404(cid)
+    
+    # Evitar borrar categorías con productos asociados
+    if category.products and len(category.products) > 0:
+        flash("No se puede eliminar una categoría con productos asociados", "warning")
+        return redirect(url_for("admin.categories"))
+    
+    db.session.delete(category)
+    db.session.commit()
+    flash("Categoría eliminada correctamente", "success")
+    return redirect(url_for("admin.categories"))
+
 
 @admin_bp.route("/orders")
 @login_required
