@@ -37,7 +37,7 @@ class Product(db.Model):
     description = db.Column(db.Text)
     price = db.Column(db.Numeric(10, 2), nullable=False)
     stock = db.Column(db.Integer, default=0)
-    image_url = db.Column(db.String(255))
+    image_url = db.Column(db.String(db.Text))
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
 
 class Address(db.Model):
