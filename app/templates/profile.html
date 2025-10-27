@@ -3,15 +3,32 @@
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-6">
-    <h2 class="h4">Mi Perfil</h2>
+    <h2 class="h4 mb-3">Mi Perfil</h2>
     <form method="post">
+      <!-- Nombre -->
       <div class="mb-3">
         <label class="form-label">Nombre</label>
-        <input class="form-control" type="text" name="name" value="{{ current_user.name }}">
+        <input class="form-control" type="text" name="name" value="{{ current_user.name }}" required>
       </div>
-      <button class="btn btn-primary" type="submit">Guardar</button>
+
+      <!-- Correo -->
+      <div class="mb-3">
+        <label class="form-label">Gmail</label>
+        <input class="form-control" type="email" name="email" value="{{ current_user.email }}" required>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-3">
+        <label class="form-label">Nueva contraseña (opcional)</label>
+        <input class="form-control" type="password" name="password" placeholder="Deja en blanco si no quieres cambiarla">
+      </div>
+
+      <button class="btn btn-primary w-100" type="submit">Guardar cambios</button>
     </form>
-    <p class="mt-3"><a href="{{ url_for('orders.my_orders') }}">Ver mis pedidos</a></p>
+
+    <p class="mt-3 text-center">
+      <a href="{{ url_for('orders.my_orders') }}">Ver mis pedidos</a>
+    </p>
   </div>
 </div>
 {% endblock %}

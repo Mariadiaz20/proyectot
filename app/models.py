@@ -1,4 +1,3 @@
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
@@ -11,6 +10,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    gmail = db.Column(db.String(150))  # Nuevo campo agregado
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), default="customer")  # customer o admin
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -22,12 +22,14 @@ class User(db.Model, UserMixin):
     def is_admin(self):
         return self.role == "admin"
 
+
 class Category(db.Model):
     __tablename__ = "category"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
     products = db.relationship("Product", backref="category", lazy=True)
+
 
 class Product(db.Model):
     __tablename__ = "product"
@@ -37,8 +39,9 @@ class Product(db.Model):
     description = db.Column(db.Text)
     price = db.Column(db.Numeric(10, 2), nullable=False)
     stock = db.Column(db.Integer, default=0)
-    image_url = db.Column(db.String(db.Text))
+    image_url = db.Column(db.String(255))
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
+
 
 class Address(db.Model):
     __tablename__ = "address"
@@ -52,6 +55,7 @@ class Address(db.Model):
     zip_code = db.Column(db.String(20), nullable=False)
     country = db.Column(db.String(100), nullable=False, default="Colombia")
 
+
 class Order(db.Model):
     __tablename__ = "order"
 
@@ -64,6 +68,7 @@ class Order(db.Model):
 
     address = db.relationship("Address", lazy=True)
     items = db.relationship("OrderItem", backref="order", lazy=True, cascade="all, delete-orphan")
+
 
 class OrderItem(db.Model):
     __tablename__ = "order_item"

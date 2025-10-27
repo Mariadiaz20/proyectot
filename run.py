@@ -1,4 +1,3 @@
-
 from app import create_app, db, seed_data
 
 app = create_app()
