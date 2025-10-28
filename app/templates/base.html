@@ -67,6 +67,43 @@
   </nav>
 {% endif %}
 
+<!-- 🔔 MENSAJES FLASH -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container mt-3">
+      {% set login_message_shown = false %}
+      {% for category, message in messages %}
+
+        {# Mostrar solo una vez el mensaje de "Debes iniciar sesión" #}
+        {% if "Debes iniciar sesión" in message %}
+          {% if not login_message_shown %}
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% set login_message_shown = true %}
+          {% endif %}
+
+        {# Mensaje de bienvenida para usuario o admin #}
+        {% elif "Bienvenido" in message %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+
+        {# Otros mensajes generales #}
+        {% else %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endif %}
+
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
 <!-- Contenido dinámico -->
 {% block content %}
   {% if current_user.is_authenticated and current_user.role == 'admin' %}

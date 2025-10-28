@@ -14,6 +14,7 @@ login_manager = LoginManager()
 login_manager.login_view = "auth.login"
 mail = Mail()  # <--- la instancia de mail
 
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'supersecretkey'
@@ -22,7 +23,6 @@ def create_app():
     print("→ Conectando a:", os.getenv("SQLALCHEMY_DATABASE_URI"))
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
-
 
     # Configuración de correo (ejemplo con Gmail)
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -36,6 +36,11 @@ def create_app():
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+
+    # ⚠️ Aquí agregamos la configuración del mensaje de Flask-Login
+    login_manager.login_message = "Debes iniciar sesión para pagar y acceder a esta página."
+    login_manager.login_message_category = "primary"
+
 
     # Rutas extra (profile)
     from .routes.profile import profile_bp
