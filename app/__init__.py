@@ -59,7 +59,9 @@ def create_app():
     from .routes.cart import cart_bp
     from .routes.orders import orders_bp
     from .routes.admin import admin_bp
-
+    from .routes.factura import orders_invoice_bp
+    
+    app.register_blueprint(orders_invoice_bp, url_prefix="/orders")
     app.register_blueprint(public_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(cart_bp, url_prefix="/cart")
