@@ -30,15 +30,15 @@
               <td>{{ o.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
 
               <td>
-                {% if o.status == 'pending' %}
+                {% if o.status == 'pedido' %}
                   <span class="badge bg-warning text-dark">Pendiente</span>
-                {% elif o.status == 'paid' %}
+                {% elif o.status == 'pagado' %}
                   <span class="badge bg-info text-dark">Pagado</span>
-                {% elif o.status == 'shipped' %}
+                {% elif o.status == 'enviado' %}
                   <span class="badge bg-primary">Enviado</span>
-                {% elif o.status == 'delivered' %}
+                {% elif o.status == 'entregado' %}
                   <span class="badge bg-success">Entregado</span>
-                {% elif o.status == 'cancelled' %}
+                {% elif o.status == 'cancelado' %}
                   <span class="badge bg-danger">Cancelado</span>
                 {% else %}
                   <span class="badge bg-secondary">{{ o.status }}</span>
